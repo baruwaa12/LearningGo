@@ -1,4 +1,4 @@
-package test
+package bob
 
 import "testing"
 
