@@ -2,34 +2,35 @@ package main
 
 import (
 	"fmt"
+	"sort"
 ) 
 
-
-func main(){
-	fmt.Println("start")
-	name()
-}
-
-func name() {
-	// var names []string
-	ages := make(map[string]int)
+func main() {
+	ages := make(map[string]int) //  mapping from strings to ints
 	ages["alice"] = 31
-	
-	// for name := range ages{names = append(names, name)
-	
-	// }
-
-	for a, b := range ages{
-		fmt.Println(a, b)
+	ages["charlie"] = 34
+	fmt.Println(ages)
+	var names []string
+	for name := range ages {
+		fmt.Println(name)
+		names = append(names, name)
 	}
-
+	sort.Strings(names)
+	for _, name := range names {
+		fmt.Printf("%s\t%d\n", name, ages[name])
+		// names := make([]string, 0, len(ages))
+	}
 }
 
-// class Ages{
-// 	string[] Names
-// }
 
-// sort.Strings(names)
-// for _, name := range names {
-// 	fmt.Printf("%s\t%d\n", name, ages[name])
-// }
+func equal(x, y map[string]int) bool {
+	if len(x) != len(y) {
+	return false
+	}
+	for k, xv := range x {
+	if yv, ok := y[k]; !ok || yv != xv {
+	return false
+	}
+ }
+	return true
+}
