@@ -5,9 +5,9 @@ import (
 	"math"
 )
 
-func main() {
-	fmt.Println("Running..")
-}
+// func main() {
+// 	fmt.Println("Running..")
+// }
 
 func hypotenuse(x, y float64) float64 {
 	return math.Sqrt(x*x + y*y)
