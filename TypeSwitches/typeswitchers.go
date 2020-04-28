@@ -27,4 +27,4 @@ func sqlQuote(x interface{}) string {
 		panic(fmt.Sprintf("unexpected type %T: %v", x, x))
 	
 	}
-}
+
