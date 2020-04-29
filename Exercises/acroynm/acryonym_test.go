@@ -20,3 +20,14 @@ func BenchmarkAcronym(b *testing.B) {
 		}
 	}
 }
+
+// goos: windows
+// goarch: amd64
+// BenchmarkAcronym-4   	   66438	     17799 ns/op	    3354 B/op	      75 allocs/op
+// PASS
+// ok  	_/c_/OnGithubAde/GoLang/Exercises/acroynm	1.566s
+// Success: Benchmarks passed.
+
+// 66438 is the total number of interations completed
+// 17799 is the time taken for 1 operation to complete.
+// 3
