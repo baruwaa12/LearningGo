@@ -186,7 +186,7 @@ var failureTestCases = []struct {
 		name: "cycle directly",
 		input: []Record{
 			{ID: 5, Parent: 2},
-			{ID: 3, Parent: 2},
+			{ID: 3, Parent: 1},
 			{ID: 2, Parent: 2},
 			{ID: 4, Parent: 1},
 			{ID: 1, Parent: 0},
