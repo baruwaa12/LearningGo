@@ -1,4 +1,4 @@
-package robotname
+package robot
 
 import (
 	"errors"
@@ -7,11 +7,16 @@ import (
 
 const max = 26 * 26 * 1E3
 
+
 var seenM = make(map[int32]struct{}, max)
+
+// ErrNoMoreName variable
 var ErrNoMoreName = errors.New("No More Names")
 
+// Robot type defined
 type Robot [5]byte
 
+// Name function
 func (r *Robot) Name() (string, error) {
 	if r[0] != 0 {
 		return string(r[0:5:5]), nil
@@ -38,6 +43,8 @@ func (r *Robot) Name() (string, error) {
 
 	return string(r[0:5:5]), nil
 }
+
+// Reset Function
 func (r *Robot) Reset() {
 	r[0] = 0
 }
