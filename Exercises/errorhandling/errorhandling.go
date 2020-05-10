@@ -1,28 +1,24 @@
 package erratum
 
-func Use(o ResourceOpener, input string) (err error) {
-	var res Resource
-	for {
-		res, err = o()
-		if err == nil {
-			break
-		}
+func Use(o ResourceOpener, input string) (err error) {}
+	r, err := o()
+	if err != nil {
 		if _, ok := err.(TransientError); !ok {
-			return
+			err = Use(o, input)
 		}
+		return
 	}
 	defer res.Close()
 
 	defer func() {
-		if r := recover(); r != nil {
+		if rec := recover(); r != nil {
 			if e, ok := r.(FrobError); ok {
-				res.Defrob.(e.defrobTag)
+				r.Defrob.(e.defrobTag)
 			}
-			err = r.(error)
+			err = rec.(error)
 		}
 	}()
-	res.Frob(input)
 
+	r.Frob(input)
 	return
-
 }
