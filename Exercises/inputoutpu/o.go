@@ -6,83 +6,107 @@ import (
 	"sync"
 )
 
-type myWriteCounter struct {
-	sync.RWMutex
-	w     io.Writer
-	bytes int64
-	nops  int
+type WriteCount struct {
+	writer io.Writer
+
+	mutex        *sync.RWMutex
+	calls        int64
+	bytesWritten int64
 }
 
-func (wc *myWriteCounter) Write(p []byte) (int, error) {
-	n, err := wc.w.Write(p)
-
-	wc.Lock()
-	defer wc.Unlock()
-	wc.bytes += int64(n)
-	wc.nops++
-
-	return n, err
+func NewWriteCounter(w io.Writer) WriteCount {
+	wc := WriteCount{
+		writer:       w,
+		bytesWritten: 0,
+		mutex:        &sync.RWMutex{},
+	}
+	return &wc
 }
 
-func (wc *myWriteCounter) WriteCount() (int64, int) {
-	wc.RLock()
-	defer wc.RUnlock()
-	return wc.bytes, wc.nops
+func (wc *WriteCount) Write(p []byte) (n int, err error) {
+	wc.mutex.Lock()
+	defer wc.mutex.Unlock()
+
+	wc.calls++
+
+	n, err = wc.writer.Write(p)
+	if err != nil {
+		return 0, err
+	}
+
+	wc.bytesWritten += int64(n)
+	return n, nil
 }
 
-func NewWriteCounter(w io.Writer) WriteCounter {
-	return &myWriteCounter{w: w}
+func (wc *WriteCount) WriteCount() (n int64, nops int) {
+	wc.mutex.RLock()
+	defer wc.mutex.RUnlock()
+	return wc.bytesWritten, int(wc.calls)
 }
 
-type myReadCounter struct {
-	sync.RWMutex
-	r     io.Reader
-	bytes int64
-	nops  int
-}
+type ReadCount struct {
+	reader io.Reader
 
-func (rc *myReadCounter) Read(p []byte) (int, error) {
-	n, err := rc.r.Read(p)
-
-	rc.Lock()
-	defer rc.Unlock()
-	rc.bytes += int64(n)
-	rc.nops++
-
-	return n, err
-}
-
-func (rc *myReadCounter) ReadCount() (n int64, nops int) {
-	rc.RLock()
-	defer rc.RUnlock()
-	return rc.bytes, rc.nops
+	mutex     *sync.RWMutex
+	calls     int
+	bytesRead int64
 }
 
 func NewReadCounter(r io.Reader) ReadCounter {
-	return &myReadCounter{r: r}
+	return &ReadCount{
+		reader:    r,
+		bytesRead: 0,
+		calls:     0,
+		mutex:     &sync.RWMutex{},
+	}
 }
 
-type myReadWriteCounter struct {
-	r ReadCounter
-	w WriteCounter
+func (rc *ReadCount) Read(p []byte) (n int, err error) {
+	rc.mutex.Lock()
+	defer rc.mutex.Unlock()
+
+	rc.calls++
+
+	n, err = rc.reader.Read(p)
+	if err != nil {
+		return 0, err
+	}
+
+	rc.bytesRead += int64(n)
+
+	return n, nil
 }
 
-func (rwc *myReadWriteCounter) Read(p []byte) (int, error) {
-	return rwc.r.Read(p)
+func (rc *ReadCount) ReadCount() (n int64, nops int) {
+	rc.mutex.RLock()
+	defer rc.mutex.RUnlock()
+	return rc.bytesRead, rc.calls
 }
 
-func (rwc *myReadWriteCounter) Write(p []byte) (int, error) {
-	return rwc.w.Write(p)
-}
-
-func (rwc *myReadWriteCounter) ReadCount() (n int64, nops int) {
-	return rwc.r.ReadCount()
-}
-
-func (rwc *myReadWriteCounter) WriteCount() (n int64, nops int) {
-	return rwc.w.WriteCount()
+type ReadWriteCount struct {
+	writer WriteCounter
+	reader ReadCounter
 }
 
 func NewReadWriteCounter(rw io.ReadWriter) ReadWriteCounter {
-	return &myReadWriteCounter{r: NewReadCounter(rw), w: NewWriteCounter(rw)}
+	return &ReadWriteCount{
+		writer: NewWriteCounter(rw),
+		reader: NewReadCounter(rw),
+	}
+}
+
+func (rw *ReadWriteCount) Read(p []byte) (n int, err error) {
+	return rw.reader.Read(p)
+}
+
+func (rw *ReadWriteCount) ReadCount() (n int64, nops int) {
+	return rw.reader.ReadCount()
+}
+
+func (rw *ReadWriteCount) Write(p []byte) (n int, err error) {
+	return rw.writer.Write(p)
+}
+
+func (rw *ReadWriteCount) WriteCount() (n int64, nops int) {
+	return rw.writer.WriteCount()
 }
