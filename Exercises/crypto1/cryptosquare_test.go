@@ -14,6 +14,14 @@ var tests = []struct {
 		"My name is Ade Baruwa a bo",
 		"MynameisAdeBaruwaabo",
 	},
+	{
+		"My name is Ade Baruwa, a bo",
+		"MynameisAdeBaruwaabo",
+	},
+	{
+		"My name is: Ade Baruwa; a, bo",
+		"MynameisAdeBaruwaabo",
+	},
 }
 
 func TestNoSpaces(t *testing.T) {

@@ -13,7 +13,7 @@ import (
 
 func remover(str1 string) (newstr string) {
 	for i := 0; i < len(str1); i++ {
-		if str1[i] != ' ' {
+		if str1[i] != ' ' && str1[i] != ','  && str1[i] != ';' && str1[i] != ':'{
 			newstr = newstr + string(str1[i])
 			fmt.Println(newstr)
 		}
