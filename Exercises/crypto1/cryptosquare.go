@@ -26,10 +26,19 @@ func remover(str1 string) (newstr string) {
 	return newstr
 }
 
-func dim(numChars int) (int, int) {
-	cols := int(math.Ceil(math.Sqrt(float64(numChars))))
-	if cols*(cols-1) >= numChars {
-		return cols, cols - 1
+func rectSize(result string) (int, int) {
+	r, c := 0, 0
+	for {
+		if r*r >= len(result) {
+			c = r
+			break
+		}
+		if r*(r+1) >= len(result) {
+			c = r + 1
+			break
+		}
+		r++
 	}
-	return cols, cols
+	return r, c
 }
+
