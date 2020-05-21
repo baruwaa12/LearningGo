@@ -24,6 +24,14 @@ func sieve(limit int) (list []int) {
 	}
 	fmt.Println(isNotPrimes)
 
+	for i := 5; i <= limit; i+=5 {
+		fmt.Println(i)
+		if i > 5 {
+			isNotPrimes[i-2] = 0
+		}
+	}
+	fmt.Println(isNotPrimes)
+
 	primes := make([]int, limit-1)
 	// for i := 2; i < len(isNotPrimes); i++ {
 	// 	if !isNotPrimes[i] {
@@ -34,6 +42,6 @@ func sieve(limit int) (list []int) {
 }
 
 func main() {
-	sieve(9)
+	sieve(30)
 	println("Done")
 }
