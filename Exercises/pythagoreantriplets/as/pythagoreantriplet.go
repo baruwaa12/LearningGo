@@ -1,5 +1,9 @@
 // Package pythagorean creates lists of pythagorean triplets.
-package pythagorean
+package main
+
+import (
+	"fmt"
+)
 
 // Triplet is a pythagorean triplet.
 type Triplet [3]int
@@ -12,6 +16,7 @@ func Range(min, max int) []Triplet {
 		for b := a; b <= max; b++ {
 			for c := b; c <= max; c++ {
 				candidate := Triplet{a, b, c}
+				// fmt.Println(candidate)
 				if isPythagorean(candidate) {
 					triplets = append(triplets, candidate)
 				}
@@ -29,6 +34,7 @@ func Sum(sum int) []Triplet {
 		for b := a; b < sum/2; b++ {
 			for c := b; c < sum; c++ {
 				candidate := Triplet{a, b, c}
+				
 				if isPythagorean(candidate) && a+b+c == sum {
 					triplets = append(triplets, candidate)
 				}
@@ -40,4 +46,9 @@ func Sum(sum int) []Triplet {
 
 func isPythagorean(triplet Triplet) bool {
 	return triplet[0]*triplet[0]+triplet[1]*triplet[1] == triplet[2]*triplet[2]
+}
+
+func main () {
+	result:=Range(3, 5)
+	fmt.Println(result)
 }
