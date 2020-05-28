@@ -4,15 +4,18 @@ import (
 	"fmt"
 )
 
-type Product struct {
-	
-	results []int
+var res []int
+
+func isPalin(min, max int) []int {
+	for i := min; i <= max; i++ {
+		res = append(res, i)
+	if i 
 	}
 
+	return res
+}
 
-func isPalin(min, max int) (results) {
-	for i := min; i <= max; i++ {
-		fmt.Println(results)
-		}
-	
+func main() {
+	result := isPalin(1, 9)
+	fmt.Println(result)
 }
