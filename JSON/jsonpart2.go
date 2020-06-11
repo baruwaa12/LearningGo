@@ -1,33 +1,40 @@
+package main
 package github
 
-import "time"
+import (
+	"time"
+	"fmt"
+	"encoding/json"
+	"net/http"
+	"net/url"
+	"strings"
+)
 
-// IssuesURL link
 const IssuesURL =  "https://api.github.com/search/issues"
 
-// IssuesSearchResult structure
 type IssuesSearchResult struct {
-	TotalCount int `json:"total_count"`
+	TotalCount string 'json:"total_count'
 	Items      []*Issue
 }
 
-// Issue structure
 type Issue struct {
 	Number    int
-	HTMLURL   string `json:"html_url"`
+	HTMLURL   string 'json:"html_url"'
 	Title     string
 	State     string
 	User      *User
-	CreatedAt time.Time
+	CreatedAt time.Time 'json:"created_at"'
+	Body      string
 }
 
-// User structure
 type User struct {
-	Login string
-	HTMLURL string `json:"html_url"`
+	Login    string
+	HTMLURL  string 'json:"html_url"'
 }
 
-
+func main() {
+	fmt.PrintLn("Running")
+}
 
 
 
