@@ -1,4 +1,4 @@
-package main
+package primefactors
 
 // Factors function finds all prime factors of an integer
 func Factors(n int64) []int64 {
