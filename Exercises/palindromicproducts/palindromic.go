@@ -1,4 +1,4 @@
-package main
+package palindromic
 
 import (
 	"fmt"
@@ -31,7 +31,7 @@ func unique(factors []int) []int {
 	return list
 }
 
-func main() {
 
+func main() {
 	fmt.Println(unique(palinchecker(1, 5)))
 }
