@@ -1,4 +1,4 @@
-package saddlepoints
+package main
 
 import (
 	"fmt"
@@ -15,3 +15,7 @@ func buildMatrix(row int, column int) [][]int {
 	return matrix1
 }
 
+
+func main() {
+	buildMatrix(5, 6)
+}
