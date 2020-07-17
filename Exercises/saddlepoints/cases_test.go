@@ -10,18 +10,18 @@ var buildMatrixtestCases = []struct {
 			description: "square - 2x2",
 			column:        2,
 			row:           2,
-			matrix:     [][]int{ {}, {} },
+			matrix:     [][]int{ {0,0}, {0,0} },
 		},
 		{
 			description: "square - 4x4",
 			column:         4,
 			row:            4,
-			matrix:     [][]int{ {}, {}, {}, {} },
+			matrix:     [][]int{ {0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0} },
 		},
 		{
 			description: "square - 3x3",
 			column:         3,
 			row:            3,
-			matrix:     [][]int{ {}, {}, {} },
+			matrix:     [][]int{ {0,0,0}, {0,0,0}, {0,0,0} },
 		},
 	}
