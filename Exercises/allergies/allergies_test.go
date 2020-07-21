@@ -10,7 +10,7 @@ func TestAllergies(t *testing.T) {
 		if result != test.score {
 			t.Fatalf("FAILED given score")
 		}
-		t.Logf("PASSED")
+		t.Logf("PASSED %s", test.description)
 
 	}
 }
