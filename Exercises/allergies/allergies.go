@@ -4,27 +4,50 @@ import (
 	"fmt"
 )
 
-var food = []string {"eggs", "peanuts", "shellfish", "strawberries", "tomatoes", "chocolate", "pollen", "cats"}
+// Key type integer
+type Key uint
 
+const (
+	// Eggs Key for allergies
+	Eggs Key = iota
+	// Peanuts Key for allergies
+	Peanuts
+	// Shellfish Key for allergies
+	Shellfish
+	// Strawberries Key for allergies
+	Strawberries
+	// Tomatoes Key for allergies
+	Tomatoes
+	// Chocolate Key for allergies
+	Chocolate
+	// Pollen key for allergies
+	Pollen
+	// Cats key for allergies
+	Cats
+)
 
-
-func allergies(total int) (results []string) {
-	output := make([]string, 0)
-	for i, f := range food {
-		if results&(1<<i) == (1 << i) {
-			output = append(output, f)
-		}
-	}
-	return output
+var allergies = []string{
+	"Eggs",
+	"Peanuts",
+	"Shellfish", 
+	"Strawberries",
+	"Tomatoes", 
+	"Chocolate",
+	"Pollen", 
+	"Cats", 
 }
 
-
-// AllergicTo checks for the allergic condition.
-func AllergicTo(n uint, s string) bool {
-	for i, f := range food {
-		if f == s {
-			return n&(1<<i) > 0
+// Names function 
+func Names(k Key) []string {
+	var result []string
+	for i := 0; i < len(allergies); i++ {
+		if k&(1<<uint(i)) != 0 {
+			result = append(result, allergies[i])
 		}
 	}
-	return false
+	return result
+}
+
+func main() {
+	fmt.Println(Names(7))
 }
