@@ -1,8 +1,6 @@
-package main
+package allergies
 
-import (
-	"fmt"
-)
+
 
 // Key type integer
 type Key uint
@@ -48,6 +46,3 @@ func Names(k Key) []string {
 	return result
 }
 
-func main() {
-	fmt.Println(Names(7))
-}
