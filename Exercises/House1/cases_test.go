@@ -5,8 +5,9 @@ type Lyrics struct {
 	songlyrics string
 }
 
-var songlyrics (
-	"This is the house that Jack built.
+var  (
+
+	expectedsonglyrics = `This is the house that Jack built.
 
 	This is the malt
 	that lay in the house that Jack built.
@@ -94,6 +95,6 @@ var songlyrics (
 	that worried the cat
 	that killed the rat
 	that ate the malt
-	that lay in the house that Jack built."
+	that lay in the house that Jack built.`
 )
 
