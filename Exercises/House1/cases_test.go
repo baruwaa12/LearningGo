@@ -11,8 +11,8 @@ var testCases = []struct {
 	{
 		noun: "BamBam",
 		action: "frightened",
-		oldVerse: []string{"This is the Cat", "that lay in in the house that jack built"},
-		newVerse: []string{"This is the BamBam", "that frightened the cat", "that lay in in the house that jack built"},
+		oldVerse: []string{"this is the cat", "that lay in in the house that jack built"},
+		newVerse: []string{"this is the BamBam", "that frightened the cat", "that lay in in the house that jack built"},
 
 	},
 }
