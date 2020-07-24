@@ -24,9 +24,21 @@ var replaceThisIsWithThatAndActionTestCases  = []struct {
 	newLine  string
 }{
 	{
-		line: "This is the Cat",
+		line: "this is the cat",
 		action: "frightened",
 		newLine: "that frightened the cat",
 	},
 }
+
+var newLineTestCases  = []struct {
+	noun string
+	newLine  string
+}{
+	{
+		noun: "cat",
+		newLine: "this is the cat",
+	},
+}
+
+
 

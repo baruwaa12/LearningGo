@@ -25,3 +25,16 @@ func TestReplaceThisIsWithThatAndAction(t *testing.T) {
 		t.Logf("PASSED: Inputs: '%s ; %s' Result: '%s' ",  test.line, test.action, actual)
 	}
 }
+
+
+func TestNewLine(t *testing.T) {
+	for _, test := range newLineTestCases {
+		actual := newLine(test.noun);
+		if actual != test.newLine {
+			t.Fatalf("FAILED: Inputs: '%s',  Expected: '%s' Actual: '%s'  ", test.noun, test.newLine, actual)
+		}
+		t.Logf("PASSED: Inputs: '%s' Result: '%s' ",  test.noun, actual)
+	}
+}
+
+
