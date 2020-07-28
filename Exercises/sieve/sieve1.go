@@ -1,47 +1,26 @@
-package main
+package sieve
 
-import (
-	"fmt"
-)
 
-func sieve(limit int) (list []int) {
-	isNotPrimes := make([]int, limit-1)
-	for i := 2; i <= limit; i++ {
-		if i%2 == 0 && i > 2 {
-			isNotPrimes[i-2] = 0
-		} else {
-			isNotPrimes[i-2] = i
-		}
+func sieve(n int) []int {
+	if n < 2 {
+		return []int{}
 	}
 
-	fmt.Println(isNotPrimes)
+	primes := []int{2}
 
-	for i := 3; i <= limit; i+=3 {
-		fmt.Println(i)
-		if i > 3 {
-			isNotPrimes[i-2] = 0
+	for i := 3; i <= n; i++ {
+		hasPrimeFactor := false
+		for j, last := 0, len(primes); j < last; j++ {
+			if i%primes[j] == 0 {
+				hasPrimeFactor = true
+				break
+			}
+		}
+		if !hasPrimeFactor {
+			primes = append(primes, i)
 		}
 	}
-	fmt.Println(isNotPrimes)
-
-	for i := 5; i <= limit; i+=5 {
-		fmt.Println(i)
-		if i > 5 {
-			isNotPrimes[i-2] = 0
-		}
-	}
-	fmt.Println(isNotPrimes)
-
-	primes := make([]int, limit-1)
-	// for i := 2; i < len(isNotPrimes); i++ {
-	// 	if !isNotPrimes[i] {
-	// 		primes = append(primes, i)
-	// 	}
-	// }
 	return primes
 }
 
-func main() {
-	sieve(30)
-	println("Done")
-}
+
