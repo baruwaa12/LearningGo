@@ -1,7 +1,6 @@
-package main
+package rna
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -13,12 +12,8 @@ func toRNA(dna string) (result string) {
 	for _, c := range dna {
 		rna.WriteRune(RNA[c])
 	}
-	result = rna.string()
+	result = rna.String()
 	return result
 }
 
-func main() {
-	toRNA("aacgtttgtaaccag")
-	fmt.Println(toRNA)
 
-}
