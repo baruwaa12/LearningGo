@@ -7,6 +7,8 @@ import (
 	"os"
 	_ "image/png"
 
+	"math"
+	"math/rand"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -48,34 +50,69 @@ func run() {
 		// Smooths out the image each time it is drawn
 		win.SetSmooth(true)
 
-		pic, err := loadPicture("birdwingup.png")
+		spritesheet, err := loadPicture("trees.png")
 		if err != nil {
-			    panic(err)
+			panic(err)
 		}
 
-		sprite := pixel.NewSprite(pic, pic.Bounds())
+		var treeFrames []pixel.Rect
+		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += 32 {
+				for y := spritesheet.Bounds().Min.Y; y < spritesheet.Bounds().Max.Y; y += 32 {
+					treeFrames = append(treeFrames, pixel.R(x, y, x+32, y+32))
+				}
+		}
+		
 
-		angle := 0.0
+		// These are all the camera variables
+		var (
+			camPos = pixel.ZV
+			camSpeed = 500.0
+			camZoom = 1.0
+			camZoomSpeed = 1.2
+			trees  []*pixel.Sprite
+			matrices []pixel.Matrix
+		)
+
 
 		last := time.Now()
 		for !win.Closed() {
 				dt := time.Since(last).Seconds()
 				last = time.Now()
 
-				angle += 3 * dt
-
-				win.Clear(colornames.Firebrick)
-
-
 				
-				mat := pixel.IM
+			cam := pixel.IM.Scaled(camPos, camZoom).Moved(win.Bounds().Center().Sub(camPos))
+			win.SetMatrix(cam)
 
-				// This will rotate the image by a number of radians around a given vector 
-				mat = mat.Rotated(pixel.ZV, angle)
-				mat = mat.Moved(win.Bounds().Center())
-				sprite.Draw(win, mat)
+			// These if statements show how much the camera should move given the length of a button press
+			if win.JustPressed(pixelgl.MouseButtonLeft) {
+					tree := pixel.NewSprite(spritesheet, treeFrames[rand.Intn(len(treeFrames))])
+					trees = append(trees, tree)
+					mouse := cam.Unproject(win.MousePosition())
+					matrices = append(matrices, pixel.IM.Scaled(pixel.ZV, 4).Moved(mouse))
+			}
+			if win.Pressed(pixelgl.KeyLeft) {
+				camPos.X -= camSpeed * dt
+			}
+			if win.Pressed(pixelgl.KeyRight) {
+				camPos.X += camSpeed * dt
+			}
+			if win.Pressed(pixelgl.KeyDown) {
+				camPos.Y -= camSpeed * dt
+			}
+			if win.Pressed(pixelgl.KeyUp) {
+				camPos.Y += camSpeed * dt
+			}
 
-				win.Update()
+			// Determines how far in the camera should move given a scroll
+			camZoom *= math.Pow(camZoomSpeed, win.MouseScroll().Y)
+
+			win.Clear(colornames.Forestgreen)
+
+			for i, tree := range trees {
+				tree.Draw(win, matrices[i])
+			}
+
+			win.Update()
 		}
 }
 
