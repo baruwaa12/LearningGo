@@ -6,6 +6,7 @@ import (
 	"image"
 	"os"
 	_ "image/png"
+	"fmt"
 
 	"math"
 	"math/rand"
@@ -39,21 +40,22 @@ func run() {
 			// Defines Window properties
 			Title: "Pixel rocks",
 			Bounds: pixel.R(0, 0, 1024, 728),
-			VSync: true,
+			// VSync: true,
 		}
 		win, err := pixelgl.NewWindow(cfg)
 		if err != nil {
 			panic(err)
 		}
 
-
-		// Smooths out the image each time it is drawn
-		win.SetSmooth(true)
-
 		spritesheet, err := loadPicture("trees.png")
 		if err != nil {
 			panic(err)
 		}
+
+		// NewBatch stores all the data of all currently drawn sprites so they dont have to be constantly redrawn after each
+		// OpenGL draw calls
+		batch := pixel.NewBatch(&pixel.TrianglesData{}, spritesheet)
+
 
 		var treeFrames []pixel.Rect
 		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += 32 {
@@ -69,14 +71,20 @@ func run() {
 			camSpeed = 500.0
 			camZoom = 1.0
 			camZoomSpeed = 1.2
-			trees  []*pixel.Sprite
-			matrices []pixel.Matrix
+			
+		)
+
+		var (
+				frames = 0
+				second = time.Tick(time.Second)
 		)
 
 
+		// last represents the current time
+		// Duration is the difference between the last registered event and current time
 		last := time.Now()
 		for !win.Closed() {
-				dt := time.Since(last).Seconds()
+				duration := time.Since(last).Seconds()
 				last = time.Now()
 
 				
@@ -84,38 +92,41 @@ func run() {
 			win.SetMatrix(cam)
 
 			// These if statements show how much the camera should move given the length of a button press
-			if win.JustPressed(pixelgl.MouseButtonLeft) {
+			// When the left mouse button is pressed a tree should be drawn to the screen.
+			if win.Pressed(pixelgl.MouseButtonLeft) {
 					tree := pixel.NewSprite(spritesheet, treeFrames[rand.Intn(len(treeFrames))])
-					trees = append(trees, tree)
 					mouse := cam.Unproject(win.MousePosition())
-					matrices = append(matrices, pixel.IM.Scaled(pixel.ZV, 4).Moved(mouse))
+					tree.Draw(batch, pixel.IM.Scaled(pixel.ZV, 4).Moved(mouse))
 			}
 			if win.Pressed(pixelgl.KeyLeft) {
-				camPos.X -= camSpeed * dt
+				camPos.X -= camSpeed * duration
 			}
 			if win.Pressed(pixelgl.KeyRight) {
-				camPos.X += camSpeed * dt
+				camPos.X += camSpeed * duration
 			}
 			if win.Pressed(pixelgl.KeyDown) {
-				camPos.Y -= camSpeed * dt
+				camPos.Y -= camSpeed * duration
 			}
 			if win.Pressed(pixelgl.KeyUp) {
-				camPos.Y += camSpeed * dt
+				camPos.Y += camSpeed * duration
 			}
 
 			// Determines how far in the camera should move given a scroll
 			camZoom *= math.Pow(camZoomSpeed, win.MouseScroll().Y)
 
 			win.Clear(colornames.Forestgreen)
-
-			for i, tree := range trees {
-				tree.Draw(win, matrices[i])
-			}
-
+			batch.Draw(win)
 			win.Update()
+
+			frames++
+			select {
+			case <-second:
+					win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, frames))
+					frames = 0
+			default:
+			}
 		}
 }
-
 
 
 func main() {
