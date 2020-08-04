@@ -39,3 +39,4 @@ There will be 2 score counters. The ring counter and pipe counter. For each ring
 
 
 
+Todo - Figure out how to use the scrolling background.
