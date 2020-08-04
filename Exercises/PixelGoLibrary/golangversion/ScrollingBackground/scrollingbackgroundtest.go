@@ -28,9 +28,11 @@ func loadPicture(path string) (pixel.Picture, error) {
 }
 
 func run() {
+
+	// Attributes for the test window.
 	cfg := pixelgl.WindowConfig{
 		Title:  "TestWindow",
-		Bounds: pixel.R(0, 0, 1024, 768),
+		Bounds: pixel.R(0, 0, 600, 500),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -38,7 +40,7 @@ func run() {
 		panic(err)
 	}
 
-	pic, err := loadPicture("lol.png")
+	pic, err := loadPicture("City.png")
 	if err != nil {
 		panic(err)
 	}
@@ -49,6 +51,8 @@ func run() {
 
 	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
+
+	
 	for !win.Closed() {
 		win.Update()
 	}
