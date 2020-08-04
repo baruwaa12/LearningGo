@@ -38,7 +38,7 @@ func run() {
 		panic(err)
 	}
 
-	pic, err := loadPicture("City.png")
+	pic, err := loadPicture("lol.png")
 	if err != nil {
 		panic(err)
 	}
