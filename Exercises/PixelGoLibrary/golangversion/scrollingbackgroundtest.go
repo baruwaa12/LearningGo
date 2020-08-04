@@ -1,20 +1,21 @@
-// Scrolling backrgound test
+// Scrolling Background test
 
 package main
 
 import (
-	"golang.org/x/image/colornames"
 	"image"
 	"os"
+
+	_ "image/png"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-
+	// "golang.org/x/image/colornames"
 )
 
-// Load the picture from the path
-
+// Function to load the picture
 func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open("C:/OnGithubAde/GoLang/Exercises/PixelGoLibrary")
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -23,42 +24,36 @@ func loadPicture(path string) (pixel.Picture, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// Convert the image to picturedata
 	return pixel.PictureDataFromImage(img), nil
 }
 
 func run() {
 	cfg := pixelgl.WindowConfig{
-
-			Title: "TestWindow",
-			Bounds: pixel.R(0, 0, 284, 512),
-			VSync: true,
+		Title:  "TestWindow",
+		Bounds: pixel.R(0, 0, 1024, 768),
+		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
 		panic(err)
 	}
 
-	pic, err := loadPicture("background.png")
+	pic, err := loadPicture("City.png")
 	if err != nil {
 		panic(err)
 	}
 
-	background := pixel.NewSprite(pic, pic.Bounds())
+	sprite := pixel.NewSprite(pic, pic.Bounds())
 
-	win.Clear(colornames.Aqua)
+	// win.Clear(colornames.Greenyellow)
 
-	background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	for !win.Closed() {
 		win.Update()
 	}
-
 }
 
-
-func main () {
+func main() {
 	pixelgl.Run(run)
 }
-
