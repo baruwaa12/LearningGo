@@ -1,77 +1,61 @@
-// Animation of the bird
-
 package main
 
 import (
-	"os"
 	"image"
-	
+	"os"
 	_ "image/png"
-
-	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/pkg/errors"
-	"golang.org/x/image/colornames"
-
+	"github.com/faiface/pixel"
 )
 
-// Load the bird animations. 
-func loadBirdAnimations(sheetpath, descpath string, frameWidth float64) (sheet pixel.Picture, anims map[string][]pixel.Rect, err error) {
 
-	defer func() {
-		    if err != nil {
-					err = errors.Wrap(err, "error loading animation sheet")
-			}
-	}()
-
-	sheetFile, err := os.Open(sheetpath)
+// Load the birds picture
+func loadPictureBird(path string) (pixel.Picture, error) {
+	file, err := os.Open(path)
 	if err != nil {
-			return nil, nil, err
+		return nil, err
 	}
-	defer sheetFile.Close()
-	sheetImg, _, err := image.Decode(sheetFile)
+	defer file.Close()
+	img, _, err := image.Decode(file)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	sheet = pixel.PictureDataFromImage(sheetImg)
-
-	var frames []pixel.Rect
-	for x := 0.0; x+frameWidth <= sheet.Bounds().Max.X; x += frameWidth {
-			frames = append(frames, pixel.R(
-				x,
-				0,
-				x+frameWidth,
-				sheet.Bounds().H(),
-			))
-	}
-	descFile, err := os.Open(descPath)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer descFile.Close()
-
-	anims = make(map[string][]pixel.Rect)
-
-	// load the animation information, name and interval inside the spritesheet
-	desc := csv.NewReader(descFile)
-	for {
-		anim, err := desc.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, nil, err
-		}
-
-		name := anim[0]
-		start, _ := strconv.Atoi(anim[1])
-		end, _ := strconv.Atoi(anim[2])
-
-		anims[name] = frames[start : end+1]
-	}
-
-	return sheet, anims, nil
+	return pixel.PictureDataFromImage(img), nil
 }
 
+
+
+func run() {
+
+	// Window properties
+	cfg := pixelgl.WindowConfig{
+		Title: "TestWindow",
+		Bounds: pixel.R(0, 0, 100, 100),
+		VSync: true,
+	}
+	win, err := pixelgl.NewWindow(cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	pic, err := loadPictureBird("wingup.png")
+	if err != nil {
+		panic(err)
+	}
+
+	// Load the picture as a sprite
+	sprite := pixel.NewSprite(pic, pic.Bounds())
+
+	// Draw the sprite to the center of the window
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+
+
+	for !win.Closed() {
+		win.Update()
+	}
+
+}
+
+func main () {
+	pixelgl.Run(run)
 }
