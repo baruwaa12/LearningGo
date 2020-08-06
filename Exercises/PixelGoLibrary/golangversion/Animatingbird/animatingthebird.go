@@ -6,8 +6,37 @@ import (
 	_ "image/png"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
+	"time"
+	// "golang.org/x/mobile/exp/sprite/portable"
 )
 
+
+type bird struct {
+	sprite  *pixel.Sprite
+	sprite2 *pixel.Sprite
+	rate    float64
+	frame   pixel.Rect
+	flapup  bool
+	lastFlapped time.Time
+
+}
+
+
+func (ba *bird) draw( win *pixelgl.Window)  {	
+	//Load the picture as a sprite
+	dt := time.Since(ba.lastFlapped).Milliseconds()
+	if dt > 100 {	
+		if ba.flapup {
+			ba.sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+		}else{
+			ba.sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+		}
+
+		ba.lastFlapped = time.Now()
+		ba.flapup = !ba.flapup
+
+	}
+}
 
 // Load the birds picture
 func loadPictureBird(path string) (pixel.Picture, error) {
@@ -25,12 +54,13 @@ func loadPictureBird(path string) (pixel.Picture, error) {
 
 
 
+
 func run() {
 
 	// Window properties
 	cfg := pixelgl.WindowConfig{
 		Title: "TestWindow",
-		Bounds: pixel.R(0, 0, 100, 100),
+		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync: true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -42,15 +72,25 @@ func run() {
 	if err != nil {
 		panic(err)
 	}
+	pic2, err := loadPictureBird("wingdown.png")
+	if err != nil {
+		panic(err)
+	}
 
 	// Load the picture as a sprite
 	sprite := pixel.NewSprite(pic, pic.Bounds())
+	sprite2 := pixel.NewSprite(pic2, pic2.Bounds())
 
-	// Draw the sprite to the center of the window
-	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	// // Draw the sprite to the center of the window
+	// sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	// sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	 
+	flappy := bird{sprite: sprite, sprite2: sprite2, rate: 0.25}
 
+		
 
 	for !win.Closed() {
+		flappy.draw(win)
 		win.Update()
 	}
 
