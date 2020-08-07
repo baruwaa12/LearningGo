@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "time"
+	"time"
 	"image"
 	"os"
 
@@ -14,22 +14,32 @@ import (
 // PipePair structure which contains all its properties
 type PipePair struct {
 	FacingUp   	pixel.Picture
-	FacingDown	pixel.Picture
-	frameUp     pixel.Vec
-	frameDown   pixel.Vec
-	x,y         float64
+	FacingDown	pixel.Picture	
+	x			float64
+	yUp 		float64
+	yDown 		float64
+	lastDrawn	time.Time
 }
 
 func (pipes *PipePair) draw(win *pixelgl.Window) {
-	// if dx = 100
-	// dx := time.Since(pipeup.draw)
+
+	dt := time.Since(pipes.lastDrawn).Milliseconds();
 	
-	// Loading the pipes as a sprite
+	if dt >= 10 {
+		pipes.x = pipes.x - 1 
+		pipes.lastDrawn = time.Now()
+	}
+
+	newFrameUpVector := pixel.Vec{X: pipes.x, Y: pipes.yUp}
+	newFrameDownVector := pixel.Vec{X: pipes.x, Y: pipes.yDown}
+	
 	pipeup := pixel.NewSprite(pipes.FacingUp, pipes.FacingUp.Bounds())
-	pipeup.Draw(win, pixel.IM.Moved(pipes.frameUp))
+	pipeup.Draw(win, pixel.IM.Moved(newFrameUpVector))
 
 	pipedown := pixel.NewSprite(pipes.FacingDown, pipes.FacingDown.Bounds())
-	pipedown.Draw(win, pixel.IM.Moved(pipes.frameDown))
+	pipedown.Draw(win, pixel.IM.Moved(newFrameDownVector))
+	
+	
 }
 
 // Function to load the picture
@@ -74,17 +84,17 @@ func run() {
 		panic(err)
 	}
 
-	background  := pixel.NewSprite(pic1, pic1.Bounds())
-	background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	background  := pixel.NewSprite(pic1, pic1.Bounds())	
 
 	winRect := win.Bounds().Center()
 	rectDown := pixel.Vec{winRect.X, win.Bounds().H()/4}
 	rectUp := pixel.Vec{winRect.X, (win.Bounds().H()*0.75)}
 
-	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, frameUp: rectUp, frameDown: rectDown}
-	pipepair.draw(win)
+	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: rectUp.X, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 
 	for !win.Closed() {
+		background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+		pipepair.draw(win)
 		win.Update()
 	}
 }
