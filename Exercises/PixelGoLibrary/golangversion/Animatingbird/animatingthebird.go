@@ -7,14 +7,13 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel"
 	"time"
-	// "golang.org/x/mobile/exp/sprite/portable"
 )
 
 
+// Bird structure which contains all its properties
 type bird struct {
 	sprite  *pixel.Sprite
 	sprite2 *pixel.Sprite
-	rate    float64
 	frame   pixel.Rect
 	flapup  bool
 	lastFlapped time.Time
@@ -23,7 +22,8 @@ type bird struct {
 
 
 func (ba *bird) draw( win *pixelgl.Window)  {	
-	//Load the picture as a sprite
+
+	// If the duration is up to 100 milliseconds it should switch images
 	dt := time.Since(ba.lastFlapped).Milliseconds()
 	if dt > 100 {	
 		if ba.flapup {
@@ -85,7 +85,7 @@ func run() {
 	// sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 	// sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 	 
-	flappy := bird{sprite: sprite, sprite2: sprite2, rate: 0.25}
+	flappy := bird{sprite: sprite, sprite2: sprite2}
 
 		
 

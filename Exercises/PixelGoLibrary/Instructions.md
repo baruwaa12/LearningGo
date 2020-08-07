@@ -11,11 +11,11 @@ There are currently 6 main tasks which need to be developed for me to complete t
   7. Addition of Levels (Extra)
   8. Creation of a character.
   
-First stage of development - Placing the sprites on screen.
+<!-- First stage of development - Placing the sprites on screen. -->
 
-Need to be able to place both the bird and background on screen - DONE
+<!-- Need to be able to place both the bird and background on screen - DONE -->
  
-<!-- Second stage of development - Animation of sprites -  -->
+<!-- Second stage of development - Animation of sprites -  --> DONE
  
 <!-- To show movement of the character I need sprites. Sprites are individual images which was layered they convey the impression of movement similar to a filpbook. -->
 <!-- As a testing each stage of development individually I collected a 5 images of a characters walking sprite and programmed them to cycle through every image after every 1/4 of second. I chose this time so that the images can flow nicely without any lag. -->
