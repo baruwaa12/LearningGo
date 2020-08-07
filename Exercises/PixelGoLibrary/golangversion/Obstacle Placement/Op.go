@@ -23,20 +23,28 @@ type PipePair struct {
 
 func (pipes *PipePair) draw(win *pixelgl.Window) {
 
+
+	// Takes the time since the last drawn pipe on screen
 	dt := time.Since(pipes.lastDrawn).Milliseconds();
 	
+	// If the duration is over 10 milliseconds 
+	// Pipe moves across the screen 1 pixel.
 	if dt >= 10 {
 		pipes.x = pipes.x - 1 
 		pipes.lastDrawn = time.Now()
 	}
 
+	// If the pipe is at 20 pixels away from x = 0 
+	// The pipe moves back to the x = 1300 of the screen
 	if pipes.x < 20 {
 		pipes.x = 1300
 	}
 
+	// Defines the position of where to place the pipes on screen
 	newFrameUpVector := pixel.Vec{X: pipes.x, Y: pipes.yUp}
 	newFrameDownVector := pixel.Vec{X: pipes.x, Y: pipes.yDown}
 	
+
 	pipeup := pixel.NewSprite(pipes.FacingUp, pipes.FacingUp.Bounds())
 	pipeup.Draw(win, pixel.IM.Moved(newFrameUpVector))
 
@@ -96,10 +104,12 @@ func run() {
 
 	x := win.Bounds().W()
 
+	// New instances of the pipepair using PipePairs struct
 	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 
 
+	// While the window is not closed, after every refresh the pipepairs should be drawn at its next position.
 	for !win.Closed() {
 		background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 		pipepair.draw(win)
