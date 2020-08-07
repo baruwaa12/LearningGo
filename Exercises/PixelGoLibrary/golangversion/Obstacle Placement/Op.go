@@ -30,6 +30,10 @@ func (pipes *PipePair) draw(win *pixelgl.Window) {
 		pipes.lastDrawn = time.Now()
 	}
 
+	if pipes.x < 20 {
+		pipes.x = 1300
+	}
+
 	newFrameUpVector := pixel.Vec{X: pipes.x, Y: pipes.yUp}
 	newFrameDownVector := pixel.Vec{X: pipes.x, Y: pipes.yDown}
 	
@@ -90,11 +94,16 @@ func run() {
 	rectDown := pixel.Vec{winRect.X, win.Bounds().H()/4}
 	rectUp := pixel.Vec{winRect.X, (win.Bounds().H()*0.75)}
 
-	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: rectUp.X, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
+	x := win.Bounds().W()
+
+	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
+	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
+
 
 	for !win.Closed() {
 		background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 		pipepair.draw(win)
+		pipepair2.draw(win)
 		win.Update()
 	}
 }
