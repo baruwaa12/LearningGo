@@ -45,8 +45,11 @@ func (ba *bird) draw( win *pixelgl.Window)  {
 		ba.flapup = !ba.flapup
 	}
 
-	if dt > 10{
-		ba.y = ba.y - 1
+	if dt > 20{
+		ba.y = ba.y - 0.5
+	}
+	if win.JustPressed(pixelgl.KeySpace) || win.JustPressed(pixelgl.KeyUp){
+		ba.y = ba.y + 15
 	}
 
 	if ba.flapup {
@@ -56,11 +59,14 @@ func (ba *bird) draw( win *pixelgl.Window)  {
 	}
 }
 
+// Extend PipePair type by add draw function.
+// Input: Window = the game window that will be drawn on.
+// Draws pipe pair scrolling across the screen.
 
 func (pipes *PipePair) draw(win *pixelgl.Window) {
 
 
-	// Takes the time since the last drawn pipe on screen
+	// Grab secomds since we last drew the pipes
 	dt := time.Since(pipes.lastDrawn).Milliseconds();
 	
 	// If the duration is over 10 milliseconds 
