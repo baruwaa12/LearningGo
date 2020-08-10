@@ -202,13 +202,10 @@ func run() {
 		pipepair2.draw(win)
 		win.Update()
 		if flappy.isPipeDownCollided(pipepair) || flappy.isPipeDownCollided(pipepair2) {
-			fmt.Println("collision")
+			return
 		}
-
-		// How to capture key press.
 	}
 }
-
 
 
 func main() {
