@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 	"image"
 	"os"
@@ -58,6 +59,34 @@ func (ba *bird) draw( win *pixelgl.Window)  {
 		ba.sprite.Draw(win, pixel.IM.Moved(currentVec))
 	}
 }
+
+func (ba *bird) isPipeDownCollided( pipes PipePair) bool  {	
+
+	currentVec := pixel.Vec{X: ba.x, Y:ba.y}
+
+	surfaceX := currentVec.X + 16
+	surfaceY := currentVec.Y - 16
+	surfaceTopY := currentVec.Y + 16
+
+	pipeDownY := pipes.yDown + 75
+	pipeDownX := pipes.x - 40
+	pipeUpY   := pipes.yUp - 75
+	
+	if surfaceY <= pipeDownY && (surfaceX >= pipeDownX && surfaceX <= pipes.x) {
+		//bottom  collision
+		fmt.Println("PipeDown Collision")
+		return true
+	}
+
+	if surfaceTopY >= pipeUpY && (surfaceX >= pipeDownX && surfaceX <= pipes.x) {
+		// Top pipe collision
+		fmt.Println("PipeUp collision")
+		return true
+	}
+
+	return false
+}
+
 
 // Extend PipePair type by add draw function.
 // Input: Window = the game window that will be drawn on.
@@ -172,6 +201,9 @@ func run() {
 		pipepair.draw(win)
 		pipepair2.draw(win)
 		win.Update()
+		if flappy.isPipeDownCollided(pipepair) || flappy.isPipeDownCollided(pipepair2) {
+			fmt.Println("collision")
+		}
 
 		// How to capture key press.
 	}

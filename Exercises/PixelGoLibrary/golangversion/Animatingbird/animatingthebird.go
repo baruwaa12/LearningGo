@@ -77,13 +77,15 @@ func run() {
 		panic(err)
 	}
 
+	pipepic, err := loadPictureBird()
+
 	// Load the picture as a sprite
 	sprite := pixel.NewSprite(pic, pic.Bounds())
 	sprite2 := pixel.NewSprite(pic2, pic2.Bounds())
 
 	// // Draw the sprite to the center of the window
-	// sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
-	// sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 	 
 	flappy := bird{sprite: sprite, sprite2: sprite2}
 

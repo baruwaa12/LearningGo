@@ -45,19 +45,19 @@ func run() {
 		panic(err)
 	}
 	
-	pic2, err := loadPicture("wingup.png")
-	if err != nil {
-		panic(err)
-	}
+	// pic2, err := loadPicture("wingup.png")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 
 	background  := pixel.NewSprite(pic1, pic1.Bounds())
-	bird := pixel.NewSprite(pic2, pic2.Bounds())
+	// bird := pixel.NewSprite(pic2, pic2.Bounds())
 
 	// win.Clear(colornames.Greenyellow)
 
 	background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
-	bird.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	// bird.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 
 
