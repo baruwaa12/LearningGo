@@ -1,13 +1,13 @@
 package main
 
 import (
+	"golang.org/x/image/colornames"
 	"fmt"
 	"time"
 	"image"
 	"os"
 
 	_ "image/png"
-
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -202,12 +202,15 @@ func run() {
 		pipepair2.draw(win)
 		win.Update()
 		if flappy.isPipeDownCollided(pipepair) || flappy.isPipeDownCollided(pipepair2) {
-			return
+			cl
+			win.Update()
 		}
+		pixelgl.Canvas
 	}
 }
 
 
 func main() {
 	pixelgl.Run(run)
+	
 }

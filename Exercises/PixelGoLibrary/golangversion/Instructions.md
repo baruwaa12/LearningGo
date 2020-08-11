@@ -32,14 +32,18 @@ Obstacles will be placed in the players ways for them to avoid. They will need t
 
 <!-- Death will occur either when the player touchs the bottom or top of the screen or when they come into contact with any of the obstacle placements. -->
 
-Sixth stage of development - Moving the pipes up and down.
+Sixth stage of development - Game over text display
 
-Vary the height of the pipes each time they appear on screen.
+Create a canvas over the game window
+Display text using a font.
+https://github.com/Lallassu/gizmo/blob/8c2f978d9ff9cc4c0617873d9d3636f45725f76d/menu.go
+
 
 Seventh stage of the development - Scoring.
 
 There will be 2 score counters. The ring counter and pipe counter. For each ring collected and pipe passed each respective counter should increase by 1. At the end of the game the number of pipes passed and rings collected should be displayed.
 
+Eighth stage of development - Button functionality to restart or quit the game
 
 
 
