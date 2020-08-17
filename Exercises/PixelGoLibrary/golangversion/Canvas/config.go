@@ -5,7 +5,7 @@ package main
 import (
 	"encoding/json"
 	"os"
-
+	"github.com/faiface/pixel/pixelgl"
 
 //=============================================================
 // Game constants
@@ -62,19 +62,25 @@ const (
 	wAssetObjectsPath    = "assets/objects/"
 	wAssetMobsPath       = "assets/mobs/"
 	wAssetMapsPath       = "assets/maps/"
-	wAssetMixedPath      = "assets/mixed/"
+	wAssetMixedPath      = "mixed/"
 	wConfigFile          = "configuration.json"
 )
 
 // Global variables struct used throughtout the game.
 type Global struct {
 	gFont           *font
+	gVariableConfig *variableConfig
+	uTime           float32
+	gCanvas			*pixelgl.Canvas
+	gWin			*pixelgl.Window
 }
 
 var global = &Global{
 
+	gVariableConfig: &variableConfig{},
 	gFont:           &font{},
-	
+	gCanvas:		 &pixelgl.Canvas{},
+	gWin: 			 &pixelgl.Window{},
 }
 
 //=============================================================
