@@ -71,16 +71,18 @@ type Global struct {
 	gFont           *font
 	gVariableConfig *variableConfig
 	uTime           float32
-	gCanvas			*pixelgl.Canvas
 	gWin			*pixelgl.Window
+	gMenu           *menu
+	gMenuItem       *menuItem
+	gActiveMenu     *menu
 }
 
 var global = &Global{
-
 	gVariableConfig: &variableConfig{},
 	gFont:           &font{},
-	gCanvas:		 &pixelgl.Canvas{},
 	gWin: 			 &pixelgl.Window{},
+	gMenu:			 &menu{},
+	gActiveMenu:     &menu{},
 }
 
 //=============================================================
