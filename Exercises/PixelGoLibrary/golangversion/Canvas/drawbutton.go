@@ -42,8 +42,8 @@ func (m *menu)  CreateMainMenu(){
 	m.logo.canvas.SetFragmentShader(fragmentShaderMenuItem)
 
 	m.items = make([]*menuItem, 0)
-	m.addMenuItem(1.0, "Replay", func() {})
-	m.addMenuItem(1.0, "Continue", func() {})
+	m.addMenuItem(1.0, "Quit", func() {})
+	m.addMenuItem(1.0, "New Game", func() {})
 	m.items[0].selected = 1
 }
 
@@ -68,19 +68,19 @@ func (m *menu) draw() {
 	
 	if m.logo != nil {
 		m.logo.canvas.Clear(pixel.RGBA{R: 0, G: 0, B: 0, A: 0})	
-		global.gFont.writeToCanvas("Replay", m.logo.canvas)
+		global.gFont.writeToCanvas("Flappy", m.logo.canvas)
 		// offsetX := (float64(global.gVariableConfig.WindowWidth) / 2) / 2 //- m.logo.canvas.Bounds().Max.X/2
 		offsetY := (float64(global.gVariableConfig.WindowHeight) / 3) - m.logo.canvas.Bounds().Max.Y
-		logoScale := float64(global.gVariableConfig.WindowWidth) / float64(global.gVariableConfig.WindowHeight)
+		logoScale := float64(global.gVariableConfig.WindowWidth * 100) / float64(global.gVariableConfig.WindowHeight  * 30)
 		m.logo.canvas.Draw(global.gWin, pixel.IM.Scaled(pixel.ZV, logoScale).Moved(pixel.V(center.X, center.Y+offsetY)))
 	}
 	for i := range m.items {
 		m.items[i].canvas.Clear(pixel.RGBA{R: 0, G: 0, B: 0, A: 0})	
 		global.gFont.writeToCanvas(m.items[i].name, m.items[i].canvas)
-		itemScale := (float64(global.gVariableConfig.WindowWidth) / float64(global.gVariableConfig.WindowHeight)) / 3
+		itemScale := (float64(global.gVariableConfig.WindowWidth) / float64(global.gVariableConfig.WindowHeight)) 
 		// offsetX := (float64(global.gVariableConfig.WindowWidth) / 3) / 2 //- m.logo.canvas.Bounds().Max.X/2
 		offsetY := (float64(global.gVariableConfig.WindowHeight) / 1.6 / 3) - m.items[i].canvas.Bounds().Max.Y*float64(i)*itemScale
-		m.items[i].canvas.Draw(global.gWin, pixel.IM.Scaled(pixel.ZV, itemScale).Moved(pixel.V(center.X, center.Y+offsetY)))
+		m.items[i].canvas.Draw(global.gWin, pixel.IM.Scaled(pixel.ZV, itemScale).Moved(pixel.V(center.X, center.Y-offsetY)))
 		
 	}
 }
@@ -91,7 +91,7 @@ func run() {
 
 	cfg := pixelgl.WindowConfig{
 		Title:       "PacMan",
-		Bounds:      pixel.R(0, 0, float64(800), float64(600)),
+		Bounds:      pixel.R(0, 0, float64(1080), float64(768)),
 		VSync:       false,
 		Undecorated: false,
 	}
