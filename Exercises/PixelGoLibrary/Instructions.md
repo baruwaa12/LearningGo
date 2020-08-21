@@ -32,12 +32,14 @@ Sixth stage of the development - Scoring.
 
 There will be 2 score counters. The ring counter and pipe counter. For each ring collected and pipe passed each respective counter should increase by 1. At the end of the game the number of pipes passed and rings collected should be displayed.
 
-
-19/08/2020 - Created a functional menu.
+<!-- 
+19/08/2020 - Created a functional menu. - Done
 
 Created a view controller to listen to events within the game window.
-Mapped inputs to move the menu on screen.
+Mapped inputs to move the menu on screen. -->
 
+
+How can the player see which item is highlighted on screen.
 
 
 

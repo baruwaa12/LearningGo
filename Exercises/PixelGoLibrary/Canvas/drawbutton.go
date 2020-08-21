@@ -25,7 +25,7 @@ type menuItem struct {
 	canvas  *pixelgl.Canvas
 	scale   float64
 	name    string
-	selected  float32
+	selected  int32
 	action   func()
 
 }
