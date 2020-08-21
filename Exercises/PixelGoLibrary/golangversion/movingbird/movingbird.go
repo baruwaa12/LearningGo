@@ -1,7 +1,6 @@
 package main
 
 import (
-	"golang.org/x/image/colornames"
 	"fmt"
 	"time"
 	"image"
@@ -202,10 +201,8 @@ func run() {
 		pipepair2.draw(win)
 		win.Update()
 		if flappy.isPipeDownCollided(pipepair) || flappy.isPipeDownCollided(pipepair2) {
-			cl
 			win.Update()
 		}
-		pixelgl.Canvas
 	}
 }
 
