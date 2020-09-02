@@ -1,12 +1,17 @@
-package main
+ package main
 
 import (
+	"log"
+	"os"
 	"golang.org/x/image/colornames"
 	"time"
 	"fmt"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-
+	"github.com/faiface/beep/mp3"
+	"github.com/faiface/beep/speaker"
+	"github.com/faiface/beep"
+	
 )
 
 // Main
@@ -23,13 +28,17 @@ type menu struct {
 }
 
 type menuItem struct {
-	canvas  *pixelgl.Canvas
-	scale   float64
-	name    string
-	selected  int32
-	action   func()
+	canvas        *pixelgl.Canvas
+	scale         float64
+	name          string
+	selected      int32
+	action    	  func()
+	position	  pixel.Vec
+	itemBounds	  pixel.Vec
 
 }
+
+
 
 // Function to create the main menu 
 func (m *menu)  CreateMainMenu(){
@@ -76,6 +85,7 @@ func (m *menu) createOptions() {
 	})
 	m.items[0].selected = 1
 }
+
 
 
 // Extend menu method to add menu items
@@ -135,6 +145,7 @@ func (m *menu) selectItem() {
 func (m *menu) draw() {
 
 	center := global.gWin.Bounds().Center()
+	fmt.Println(center)
 	
 	if m.logo != nil {
 		m.logo.canvas.Clear(pixel.RGBA{R: 0, G: 0, B: 0, A: 0})	
@@ -149,8 +160,10 @@ func (m *menu) draw() {
 		itemScale := (float64(global.gVariableConfig.WindowWidth) / float64(global.gVariableConfig.WindowHeight)) / 1
 		offsetY := (float64(global.gVariableConfig.WindowHeight) / 1.6 / 3) - m.items[i].canvas.Bounds().Max.Y*float64(i)*itemScale
 		m.items[i].canvas.Draw(global.gWin, pixel.IM.Scaled(pixel.ZV, itemScale).Moved(pixel.V(center.X, center.Y-offsetY)))
+		m.items[i].position = pixel.Vec{X: center.X, Y: center.Y-offsetY}
 	}
 }
+
 
 func menuSetup() {
 	
@@ -191,7 +204,7 @@ func run() {
 		panic(err)
 	}
 
-	centerWindow(gWin)
+	centerWindow(gWin) 
 
 	global.gWin = gWin
 
@@ -203,17 +216,40 @@ func run() {
 
 }
 
+func musicSetup() beep.StreamSeekCloser{
+	f, err := os.Open("Observatory.mp3")
+	if err != nil {
+			log.Fatal(err)
+		}
+
+	streamer, format, err := mp3.Decode(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
+	
+	speaker.Play(streamer)
+
+	return streamer
+}
+
+
 
 func gameLoop() {
 
 	last := time.Now()
 	frameDt := 0.0
 
+	streamer := musicSetup()
 	
+
 	for !global.gWin.Closed() && !global.gController.quit {
+	
 		dt := time.Since(last).Seconds()
 		frameDt += dt
 		last = time.Now()
+
 
 		global.gWin.Clear(global.gClearColor)
 
@@ -221,8 +257,9 @@ func gameLoop() {
 			global.gActiveMenu.draw()
 			global.gWin.Update()
 		} else{
+			
+
 			drawGameScene()
-	
 			if global.gGameScene.flappy.CollidedWithPipe(global.gGameScene.obstacle1)  || global.gGameScene.flappy.CollidedWithPipe(global.gGameScene.obstacle2) {
 				global.gWin.Clear(colornames.Black)
 				global.gActiveMenu = global.gMenu
@@ -233,5 +270,8 @@ func gameLoop() {
 		global.gController.update()
 
 		global.gWin.Update()
-	}		
+	}
+	streamer.Close()	
+
 }
+
