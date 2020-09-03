@@ -9,6 +9,10 @@ import (
 	_ "image/png"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"math/rand"
+	
+
+
 )
 
 // PipePair structure which contains all its properties
@@ -19,6 +23,13 @@ type PipePair struct {
 	yUp 		float64
 	yDown 		float64
 	lastDrawn	time.Time
+}
+
+
+type Ring struct {
+	sprite  	*pixel.Sprite
+	x 			int
+	y			int
 }
 
 type bird struct {
@@ -36,6 +47,7 @@ type GameScene struct {
 	flappy  	bird
 	obstacle1	PipePair
 	obstacle2	PipePair
+	Ring		Ring
 }
 
 func (ba *bird) draw( win *pixelgl.Window)  {	
@@ -88,9 +100,21 @@ func (ba *bird) CollidedWithPipe( pipes PipePair) bool  {
 	return false
 }
 
+
 // Recenter the birds position after the bird collides with a pipe
 func (ba *bird) recenterPosition(win *pixelgl.Window) {
 	ba.y = win.Bounds().Center().Y
+}
+
+func (ring *Ring) draw(win *pixelgl.Window) {
+
+	
+	
+	startingpostion := rand.Intn((900 - 100) + 100)
+    currentVec := pixel.Vec{X: float64(startingpostion), Y:float64(startingpostion)}
+
+
+	ring.sprite.Draw(global.gWin, pixel.IM.Moved(currentVec))
 }
 
 // Extend PipePair type by add draw function.
@@ -106,9 +130,16 @@ func (pipes *PipePair) draw(win *pixelgl.Window) {
 	// If the duration is over 10 milliseconds 
 	// Pipe moves across the screen 1 pixel.
 	if dt >= 10 {
-		pipes.x = pipes.x - 1 
+		pipes.x = pipes.x - 1
 		pipes.lastDrawn = time.Now()
+	
 	}
+
+	// if dt >= 1000 {
+	// 	pipes.x = pipes.x - 20
+	// 	pipes.lastDrawn = time.Now()
+
+	// }	
 
 	// If the pipe is at 20 pixels away from x = 0 
 	// The pipe moves back to the x = 1300 of the screen
@@ -171,10 +202,16 @@ func gameSetup() {
 	if err != nil {
 		panic(err)
 	}
-	
+
+	ringpic, err := loadPicture("ring1.png")
+	if err != nil {
+		panic(err)
+	}
+
 	background  := pixel.NewSprite(pic1, pic1.Bounds())
 	sprite := pixel.NewSprite(WingUp, WingUp.Bounds())
 	sprite2 := pixel.NewSprite(WingDown, WingDown.Bounds())
+	ring := pixel.NewSprite(ringpic, ringpic.Bounds())
 
 	
 	winRect := win.Bounds().Center()
@@ -183,12 +220,14 @@ func gameSetup() {
 
 	x := win.Bounds().W()
 
+	startingpostion := rand.Intn((900 - 100) + 100)
+
 	// New instances of the pipepair using PipePairs struct
 	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	flappy := bird{sprite: sprite, sprite2: sprite2, x: win.Bounds().Center().X, y :win.Bounds().Center().Y }
-
-	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2}
+	ringobject := Ring{sprite: ring, x: startingpostion, y: startingpostion}
+	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject}
 }
 
 
@@ -196,6 +235,7 @@ func gameSetup() {
 func drawGameScene() {
 	var win = global.gWin
 
+	global.gGameScene.Ring.draw(win)
 	global.gGameScene.background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 	global.gGameScene.flappy.draw(win)
 	global.gGameScene.obstacle1.draw(win)

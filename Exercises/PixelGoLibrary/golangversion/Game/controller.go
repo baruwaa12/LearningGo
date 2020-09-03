@@ -44,6 +44,7 @@ func (c *controller) update() {
 				minY := itemBounds1.Y - (itemSize.Max.Y*0.5)
 				maxY := itemBounds1.Y + (itemSize.Max.Y*0.5)
 				
+				// If the mouse is within the bounds of a button it should highlight the button
 				if mouseBounds.Y <= maxY && mouseBounds.Y >= minY  && 
 						mouseBounds.X <= maxX && mouseBounds.X >= minX {
 							// 

@@ -81,6 +81,7 @@ type Global struct {
 	gGameScene		*GameScene
 	gOptionsMenu	*menu
 	gClearColor     pixel.RGBA
+	
 }
 
 var global = &Global{
