@@ -10,9 +10,6 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"math/rand"
-	
-
-
 )
 
 // PipePair structure which contains all its properties
@@ -28,8 +25,10 @@ type PipePair struct {
 
 type Ring struct {
 	sprite  	*pixel.Sprite
-	x 			int
-	y			int
+	x 			float64
+	y			float64
+	lastDrawn	time.Time
+
 }
 
 type bird struct {
@@ -73,6 +72,11 @@ func (ba *bird) draw( win *pixelgl.Window)  {
 	}
 }
 
+func randomfloat(min, max float64) float64 {
+	position := min + max + rand.Float64()
+	return position
+}
+
 func (ba *bird) CollidedWithPipe( pipes PipePair) bool  {	
 
 	currentVec := pixel.Vec{X: ba.x, Y:ba.y}
@@ -100,22 +104,47 @@ func (ba *bird) CollidedWithPipe( pipes PipePair) bool  {
 	return false
 }
 
+// func randFloats(min, max float64) float64 {
+// 	for i := range result {
+// 		result = min + rand.Float64() * (max - min)
+// 	}
+// 	return result
+// }
 
 // Recenter the birds position after the bird collides with a pipe
 func (ba *bird) recenterPosition(win *pixelgl.Window) {
 	ba.y = win.Bounds().Center().Y
 }
 
+
 func (ring *Ring) draw(win *pixelgl.Window) {
 
-	
-	
-	startingpostion := rand.Intn((900 - 100) + 100)
-    currentVec := pixel.Vec{X: float64(startingpostion), Y:float64(startingpostion)}
+	currentVec := pixel.Vec{X: ring.x, Y: ring.y}
 
+
+	// Grab seconds since we last drew the pipes
+	dt := time.Since(ring.lastDrawn).Milliseconds();
+	
+	// If the duration is over 10 milliseconds 
+	// Pipe moves across the screen 1 pixel.
+	if dt >= 10 {
+		ring.x = ring.x - 2
+		ring.lastDrawn = time.Now()
+	}
+
+	ring.y = ring.y
+	
+	if ring.x  < 20 {
+		ring.x = 1300
+		ring.y = ring.y - 400
+		if ring.y < -80 {
+			ring.y = 600
+		}
+	}
 
 	ring.sprite.Draw(global.gWin, pixel.IM.Moved(currentVec))
 }
+
 
 // Extend PipePair type by add draw function.
 // Input: Window = the game window that will be drawn on.
@@ -124,7 +153,7 @@ func (ring *Ring) draw(win *pixelgl.Window) {
 func (pipes *PipePair) draw(win *pixelgl.Window) {
 
 
-	// Grab secomds since we last drew the pipes
+	// Grab seconds since we last drew the pipes
 	dt := time.Since(pipes.lastDrawn).Milliseconds();
 	
 	// If the duration is over 10 milliseconds 
@@ -132,7 +161,9 @@ func (pipes *PipePair) draw(win *pixelgl.Window) {
 	if dt >= 10 {
 		pipes.x = pipes.x - 1
 		pipes.lastDrawn = time.Now()
-	
+		if dt >= 5000 {
+			pipes.x = pipes.x - 50
+		}
 	}
 
 	// if dt >= 1000 {
@@ -143,9 +174,11 @@ func (pipes *PipePair) draw(win *pixelgl.Window) {
 
 	// If the pipe is at 20 pixels away from x = 0 
 	// The pipe moves back to the x = 1300 of the screen
-	if pipes.x < 20 {
+
+ 	if pipes.x < 20 {
 		pipes.x = 1300
 	}
+
 
 	// Defines the position of where to place the pipes on screen
 	newFrameUpVector := pixel.Vec{X: pipes.x, Y: pipes.yUp}
@@ -220,13 +253,13 @@ func gameSetup() {
 
 	x := win.Bounds().W()
 
-	startingpostion := rand.Intn((900 - 100) + 100)
+	// startingpostion := win.Bounds().Center()
 
 	// New instances of the pipepair using PipePairs struct
 	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	flappy := bird{sprite: sprite, sprite2: sprite2, x: win.Bounds().Center().X, y :win.Bounds().Center().Y }
-	ringobject := Ring{sprite: ring, x: startingpostion, y: startingpostion}
+	ringobject := Ring{sprite: ring, x: x, y: x}
 	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject}
 }
 
@@ -235,11 +268,15 @@ func gameSetup() {
 func drawGameScene() {
 	var win = global.gWin
 
-	global.gGameScene.Ring.draw(win)
+
 	global.gGameScene.background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 	global.gGameScene.flappy.draw(win)
 	global.gGameScene.obstacle1.draw(win)
 	global.gGameScene.obstacle2.draw(win)
+	global.gGameScene.Ring.draw(win)
+
 	win.Update()
 }
 
+
+// Need to fix placement and also reduce speed at which the object is being painted on screen.
