@@ -47,6 +47,7 @@ type GameScene struct {
 	obstacle1	PipePair
 	obstacle2	PipePair
 	Ring		Ring
+	Ring1       Ring
 }
 
 func (ba *bird) draw( win *pixelgl.Window)  {	
@@ -137,7 +138,7 @@ func (ring *Ring) draw(win *pixelgl.Window) {
 	if ring.x  < 20 {
 		ring.x = 1300
 		ring.y = ring.y - 400
-		if ring.y < -80 {
+		if ring.y < - 80 {
 			ring.y = 600
 		}
 	}
@@ -259,8 +260,9 @@ func gameSetup() {
 	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	flappy := bird{sprite: sprite, sprite2: sprite2, x: win.Bounds().Center().X, y :win.Bounds().Center().Y }
-	ringobject := Ring{sprite: ring, x: x, y: x}
-	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject}
+	ringobject := Ring{sprite: ring, x: x, y: x - 30}
+	ringobject2 := Ring{sprite: ring, x: x, y : (x - 100)}
+	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject, Ring1: ringobject2}
 }
 
 
@@ -268,15 +270,18 @@ func gameSetup() {
 func drawGameScene() {
 	var win = global.gWin
 
-
-	global.gGameScene.background.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	global.gGameScene.background.Draw(win, pixel.IM.Moved(win.Bounds().Center())) 
 	global.gGameScene.flappy.draw(win)
 	global.gGameScene.obstacle1.draw(win)
 	global.gGameScene.obstacle2.draw(win)
 	global.gGameScene.Ring.draw(win)
+	global.gGameScene.Ring1.draw(win)
+
 
 	win.Update()
 }
 
-
 // Need to fix placement and also reduce speed at which the object is being painted on screen.
+// Adjust the height at which the bird rises when pressing the button.
+// Collecting the rings is next.
+// Multiple rings on the screen 
