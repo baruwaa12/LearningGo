@@ -47,7 +47,6 @@ type GameScene struct {
 	obstacle1	PipePair
 	obstacle2	PipePair
 	Ring		Ring
-	Ring1       Ring
 }
 
 func (ba *bird) draw( win *pixelgl.Window)  {	
@@ -120,7 +119,8 @@ func (ba *bird) recenterPosition(win *pixelgl.Window) {
 
 func (ring *Ring) draw(win *pixelgl.Window) {
 
-	currentVec := pixel.Vec{X: ring.x, Y: ring.y}
+	currentVec1 := pixel.Vec{X: ring.x, Y: ring.y}
+	// currentVec2 := pixel.Vec{X: ring.x, Y: ring.y + 50}
 
 
 	// Grab seconds since we last drew the pipes
@@ -129,21 +129,30 @@ func (ring *Ring) draw(win *pixelgl.Window) {
 	// If the duration is over 10 milliseconds 
 	// Pipe moves across the screen 1 pixel.
 	if dt >= 10 {
-		ring.x = ring.x - 2
+		ring.x = ring.x - 1 
 		ring.lastDrawn = time.Now()
 	}
 
 	ring.y = ring.y
 	
 	if ring.x  < 20 {
-		ring.x = 1300
-		ring.y = ring.y - 400
+		ring.x = 1100
+		ring.y = ring.y - 600
 		if ring.y < - 80 {
-			ring.y = 600
+			ring.y = 500
 		}
 	}
 
-	ring.sprite.Draw(global.gWin, pixel.IM.Moved(currentVec))
+
+
+
+	ring.sprite.Draw(global.gWin, pixel.IM.Moved(currentVec1))
+}
+
+
+func (ring2 *Ring) draw(win *pixelgl.Window) {
+
+	currentVec := pixel.Vec{}
 }
 
 
@@ -207,6 +216,7 @@ func loadPicture(path string) (pixel.Picture, error) {
 		return nil, err
 	}
 	return pixel.PictureDataFromImage(img), nil
+
 }
 
 func gameSetup() {
@@ -260,9 +270,9 @@ func gameSetup() {
 	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	flappy := bird{sprite: sprite, sprite2: sprite2, x: win.Bounds().Center().X, y :win.Bounds().Center().Y }
-	ringobject := Ring{sprite: ring, x: x, y: x - 30}
-	ringobject2 := Ring{sprite: ring, x: x, y : (x - 100)}
-	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject, Ring1: ringobject2}
+	ringobject := Ring{sprite: ring, x: x, y: x}
+	// ringobject2 := Ring{sprite: ring, x: x, y : (x - 100)}
+	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject}
 }
 
 
@@ -275,13 +285,10 @@ func drawGameScene() {
 	global.gGameScene.obstacle1.draw(win)
 	global.gGameScene.obstacle2.draw(win)
 	global.gGameScene.Ring.draw(win)
-	global.gGameScene.Ring1.draw(win)
 
 
 	win.Update()
 }
 
 // Need to fix placement and also reduce speed at which the object is being painted on screen.
-// Adjust the height at which the bird rises when pressing the button.
-// Collecting the rings is next.
 // Multiple rings on the screen 
