@@ -1,26 +1,42 @@
-package main
+package aliquot
 
-import (
-	"fmt"
+import "errors"
+
+type Classification int
+
+const (
+	ClassificationPerfect Classification = iota
+	ClassificationAbundant
+	ClassificationDeficient
 )
 
-func isPerfect(a int, b int, c int) (result bool) {
-	if a+b != c {
-		result = false
-		fmt.Println(result)
-		return result
-	} else {
-		if a+b == c {
-			result = true
-			fmt.Println(result)
+var ErrOnlyPositive = errors.New("Invalid")
 
-		}
-
+func Classify(n int64) (Classification, error) {
+	if n < 1 {
+		return 1, ErrOnlyPositive
 	}
-	return result
-}
 
-func main() {
-	result := isPerfect(1, 2, 3)
-	fmt.Println(result)
+	var fact []int64
+	var i int64
+	for i = 1; i < n; i++ {
+		if n%i == 0 {
+			fact = append(fact, int64(i))
+		}
+	}
+	var sum int64
+	for _, val := range fact {
+		sum += val
+	}
+
+	var classification Classification
+	switch {
+	case n == sum:
+		classification = 0
+	case n < sum:
+		classification = 1
+	case n > sum:
+		classification = 2
+	}
+	return classification, nil
 }

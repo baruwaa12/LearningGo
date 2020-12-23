@@ -24,11 +24,11 @@ type PipePair struct {
 
 
 type Ring struct {
-	sprite  	*pixel.Sprite
+	picture  	pixel.Picture
 	x 			float64
-	y			float64
 	lastDrawn	time.Time
-
+	yUp			float64
+	yDown		float64
 }
 
 type bird struct {
@@ -46,7 +46,8 @@ type GameScene struct {
 	flappy  	bird
 	obstacle1	PipePair
 	obstacle2	PipePair
-	Ring		Ring
+	Ring1		Ring
+	Ring2		Ring
 }
 
 func (ba *bird) draw( win *pixelgl.Window)  {	
@@ -117,42 +118,61 @@ func (ba *bird) recenterPosition(win *pixelgl.Window) {
 }
 
 
-func (ring *Ring) draw(win *pixelgl.Window) {
+// func (ring *Ring) draw(win *pixelgl.Window) {
 
-	currentVec1 := pixel.Vec{X: ring.x, Y: ring.y}
-	// currentVec2 := pixel.Vec{X: ring.x, Y: ring.y + 50}
+// 	currentVec1 := pixel.Vec{X: ring.x, Y: ring.y}
+// 	// currentVec2 := pixel.Vec{X: ring.x, Y: ring.y + 50}
 
 
-	// Grab seconds since we last drew the pipes
-	dt := time.Since(ring.lastDrawn).Milliseconds();
+// 	// Grab seconds since we last drew the pipes
+// 	dt := time.Since(ring.lastDrawn).Milliseconds();
 	
-	// If the duration is over 10 milliseconds 
-	// Pipe moves across the screen 1 pixel.
+// 	// If the duration is over 10 millisecond 
+// 	// Pipe moves across the screen 1 pixel.
+// 	if dt >= 10 {
+// 		ring.x = ring.x - 1 
+// 		ring.lastDrawn = time.Now()
+// 	}
+
+// 	ring.y = ring.y
+	
+// 	if ring.x  < 20 {
+// 		ring.x = 1100
+// 		ring.y = ring.y - 600
+// 		if ring.y < - 80 {
+// 			ring.y = 500
+// 		}
+// 	}
+
+// }
+
+// // 	ring.sprite.Draw(global.gWin, pixel.IM.Moved(currentVec1))
+// // }
+
+
+func (rings *Ring) draw(win *pixelgl.Window) {
+
+	
+	currentVec := pixel.Vec{X: rings.x, Y: rings.yUp}
+	currentVec2 := pixel.Vec{X: rings.x, Y: rings.yDown}
+
+	dt := time.Since(rings.lastDrawn).Milliseconds();
+
 	if dt >= 10 {
-		ring.x = ring.x - 1 
-		ring.lastDrawn = time.Now()
+		rings.x = rings.x - 1
+		rings.lastDrawn = time.Now()
 	}
 
-	ring.y = ring.y
-	
-	if ring.x  < 20 {
-		ring.x = 1100
-		ring.y = ring.y - 600
-		if ring.y < - 80 {
-			ring.y = 500
-		}
+	if rings.x < 20 {
+		rings.x = 1200
 	}
 
+	firstring := pixel.NewSprite(rings.picture, rings.picture.Bounds())
+    secondring := pixel.NewSprite(rings.picture, rings.picture.Bounds())
 
+	firstring.Draw(win, pixel.IM.Moved(currentVec))
+	secondring.Draw(win, pixel.IM.Moved(currentVec2))
 
-
-	ring.sprite.Draw(global.gWin, pixel.IM.Moved(currentVec1))
-}
-
-
-func (ring2 *Ring) draw(win *pixelgl.Window) {
-
-	currentVec := pixel.Vec{}
 }
 
 
@@ -255,7 +275,7 @@ func gameSetup() {
 	background  := pixel.NewSprite(pic1, pic1.Bounds())
 	sprite := pixel.NewSprite(WingUp, WingUp.Bounds())
 	sprite2 := pixel.NewSprite(WingDown, WingDown.Bounds())
-	ring := pixel.NewSprite(ringpic, ringpic.Bounds())
+	// ring := pixel.NewSprite(ringpic, ringpic.Bounds())
 
 	
 	winRect := win.Bounds().Center()
@@ -270,9 +290,9 @@ func gameSetup() {
 	pipepair := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x/2, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	pipepair2 := PipePair{FacingUp: pipeUpPic, FacingDown: pipeDownPic, x: x, yUp: rectUp.Y, yDown: rectDown.Y,  lastDrawn: time.Now()}
 	flappy := bird{sprite: sprite, sprite2: sprite2, x: win.Bounds().Center().X, y :win.Bounds().Center().Y }
-	ringobject := Ring{sprite: ring, x: x, y: x}
-	// ringobject2 := Ring{sprite: ring, x: x, y : (x - 100)}
-	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring: ringobject}
+	ringobject := Ring{picture: ringpic, x: 200, yUp: 700}
+	ringobject2 := Ring{picture: ringpic, x: 100, yDown: 300}
+	global.gGameScene = &GameScene{background: background, flappy: flappy, obstacle1: pipepair, obstacle2: pipepair2, Ring1: ringobject, Ring2: ringobject2}
 }
 
 
@@ -284,7 +304,8 @@ func drawGameScene() {
 	global.gGameScene.flappy.draw(win)
 	global.gGameScene.obstacle1.draw(win)
 	global.gGameScene.obstacle2.draw(win)
-	global.gGameScene.Ring.draw(win)
+	// global.gGameScene.Ring1.draw(win)
+	// global.gGameScene.Ring2.draw(win)
 
 
 	win.Update()

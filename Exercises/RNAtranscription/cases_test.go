@@ -10,4 +10,20 @@ var testCases = []struct {
 		dna: "ACGTGGTCTTAA",
 		result: "UGCACCAGAAUU",
 	},
+	{
+		description: "Random DNA string 2",
+		dna: "ACGTGGTCTTAA",
+		result: "UGCACCAGAAUU",
+	},
+	{
+		description: "Random DNA string 3",
+		dna: "ACGCGCCTTAA",
+		result: "UGCGCGGAAUU",
+	},
+	{
+		description: "Random DNA string 4",
+		dna: "CGCGTTTTAA",
+		result: "GCGCAAAAUU",
+	},
+
 }
