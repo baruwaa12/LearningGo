@@ -16,14 +16,14 @@ var testCases = []struct {
 		expected:    "one", 
 	},	 
 	{
-		description: "four",
+		description: "four ",
 		input:		 4,
 		expected:    "four", 
 	},
 	{
-		description: "twenty",
+		description: "twenty ",
 		input:		 20,
-		expected:    "twenty", 
+		expected:    "twenty ", 
 	},	
 	{
 		description: "nineteen",
@@ -34,6 +34,17 @@ var testCases = []struct {
 		description: "fifteen",
 		input:		 15,
 		expected:    "fifteen", 
-	},	   
+	},
+	{
+		description: "eighty one",
+		input:		 81,
+		expected:    "eighty one", 
+	},
+	{
+		description: "twenty two",
+		input:		 22,
+		expected:    "twenty two", 
+	}, 
+ 
 
 }
