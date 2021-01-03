@@ -4,11 +4,12 @@ import (
 	"testing"
 )
 
-func TestNumberChecker(t *testing.T) {
-	for _, test := range testCases {
-		if actual := numberchecker(test.input); actual != test.expected {
+func TestGetHundreds(t *testing.T) {
+	for _, test := range getHundredsTestCases {
+		if actual := getHundreds(test.input); actual != test.expected {
 			t.Errorf("Convert(%d) = %q, expected %q.",
 				test.input, actual, test.expected)
 		}
 	}
 }
+

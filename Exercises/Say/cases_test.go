@@ -1,50 +1,28 @@
 package Say
 
-var testCases = []struct {
+var getHundredsTestCases = []struct {
 	description string
 	input 		int
 	expected 	string
 }{
 	{
-		description: "zero",
-		input:		 0,
-		expected:    "zero", 
+		description: "one hundred",
+		input:		 100,
+		expected:    "one-hundred", 
 	},
 	{
-		description: "one",
-		input:		 1,
-		expected:    "one", 
-	},	 
-	{
-		description: "four ",
-		input:		 4,
-		expected:    "four", 
+		description: "nine hundred and ninety nine",
+		input:		 999,
+		expected:    "nine-hundred", 
 	},
 	{
-		description: "twenty ",
-		input:		 20,
-		expected:    "twenty ", 
-	},	
-	{
-		description: "nineteen",
-		input:		 19,
-		expected:    "nineteen", 
+		description: "ninety nine",
+		input:		 99,
+		expected:    "", 
 	},
 	{
-		description: "fifteen",
-		input:		 15,
-		expected:    "fifteen", 
+		description: "four hundred and fifty",
+		input:		 450,
+		expected:    "four-hundred", 
 	},
-	{
-		description: "eighty one",
-		input:		 81,
-		expected:    "eighty one", 
-	},
-	{
-		description: "twenty two",
-		input:		 22,
-		expected:    "twenty two", 
-	}, 
- 
-
 }
