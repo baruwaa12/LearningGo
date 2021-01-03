@@ -13,3 +13,20 @@ func TestGetHundreds(t *testing.T) {
 	}
 }
 
+func TestGetTens(t *testing.T) {
+	for _, test := range getTensTestCase {
+		if actual := getTens(test.input); actual != test.expected {
+			t.Errorf("Convert(%d) = %q, expected %q.",
+				test.input, actual, test.expected)
+		}
+	}
+}
+
+func TestGetUnits(t *testing.T) {
+	for _, test := range getUnitsTestCases {
+		if actual := getUnits(test.input); actual != test.expected {
+			t.Errorf("Convert(%d) = %q, expected %q.",
+				test.input, actual, test.expected)
+		}
+	}
+}
