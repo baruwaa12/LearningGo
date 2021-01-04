@@ -92,3 +92,36 @@ var getUnitsTestCases = []struct {
 		expected:    "nine", 
 	},
 }
+
+
+var getFinalNumberTestCases = []struct {
+	description string
+	input 		int
+	expected 	string
+}{
+	{
+		description: "one hundred and one",
+		input:		 101,
+		expected:    "one-hundred and one", 
+	},
+	{
+		description: "one hundred and twenty one",
+		input:		 121,
+		expected:    "one-hundred and twenty one", 
+	},
+	{
+		description: "five hundred and twenty ",
+		input:		 520,
+		expected:    "five-hundred and twenty ", 
+	},
+	{
+		description: "five hundred and twenty ",
+		input:		 520,
+		expected:    "five-hundred and twenty ", 
+	},
+	{
+		description: "nine hundred and sixty ",
+		input:		 960,
+		expected:    "nine-hundred and sixty  ", 
+	},
+}

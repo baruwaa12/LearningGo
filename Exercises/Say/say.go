@@ -1,7 +1,7 @@
 package Say
 
 var uptotwenty = []string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
-var tens = []string{"", "", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"}
+var tens = []string{"", "", "twenty ", "thirty ", "fourty ", "fifty ", "sixty ", "seventy ", "eighty ", "ninety "}
 var hundreds = []string{"", "one-hundred", "two-hundred", "three-hundred", "four-hundred", "five-hundred", "six-hundred", "seven-hundred", "eight-hundred", "nine-hundred"}
 var thousands = []string{"", "one-thousand", "two-thousand", "three-thousand", "four-thousand", "five-thousand", "six-thousand", "seven-thousand", "eight-thousand", "nine-thousand "}
 
@@ -46,3 +46,10 @@ func getUnits(number int) (string) {
 	return uptotwenty[Units]
 
 }
+
+func joinNumbers(number int) (string) {
+	finalNumber := getHundreds(number) + " and " + getTens(number) + "" + getUnits(number)
+	return finalNumber
+}
+
+
