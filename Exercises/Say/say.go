@@ -1,10 +1,17 @@
 package Say
 
+import (
+	"fmt"
+	"strconv"
+)
+
+
+
 var uptotwenty = []string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
 var tens = []string{"", "", "twenty ", "thirty ", "fourty ", "fifty ", "sixty ", "seventy ", "eighty ", "ninety "}
 var hundreds = []string{"", "one-hundred", "two-hundred", "three-hundred", "four-hundred", "five-hundred", "six-hundred", "seven-hundred", "eight-hundred", "nine-hundred"}
-var thousands = []string{"", "one-thousand", "two-thousand", "three-thousand", "four-thousand", "five-thousand", "six-thousand", "seven-thousand", "eight-thousand", "nine-thousand "}
-
+var thousands = []string{"", "one-thousand", "two-thousand", "three-thousand", "four-thousand", "five-thousand", "six-thousand", "seven-thousand", "eight-thousand", "nine-thousand"}
+var postfix = []string{"", "thousand", "million", "billion", "trillion"}
 
 
 func getHundreds(number int) (string) {
@@ -47,9 +54,40 @@ func getUnits(number int) (string) {
 
 }
 
-func joinNumbers(number int) (string) {
-	finalNumber := getHundreds(number) + " and " + getTens(number) + "" + getUnits(number)
-	return finalNumber
+func joinNumbers(number int, postfix string) (string) {
+	finalNumber:= ""
+	if number > 100{
+		finalNumber = getHundreds(number) + " and " + getTens(number) + "" + getUnits(number)
+	}else{
+		finalNumber = getTens(number) + "" + getUnits(number)
+	}
+	return finalNumber + " " + postfix
+	
+	
 }
+
+
+
+func NumberPostFixJoiner(number int) (string) {
+	finalDigitInWords := ""
+	numberString := strconv.Itoa(number)
+	postfixIndex := -1
+	for i := len(numberString) - 1; i >= 0; i = i - 3 {
+		digits := ""
+		postfixIndex += 1
+		if i < 3 {
+			digits = numberString[0:i+1]
+		}else{
+			digits = numberString[i-2: i+1]
+		}																			 
+		fmt.Println(digits)
+		digitnumb, _ := strconv.Atoi(digits)
+		digitInWords := joinNumbers(digitnumb, postfix[postfixIndex])
+		finalDigitInWords = digitInWords + " " + " " + finalDigitInWords
+
+	}
+	return finalDigitInWords
+}
+
 
 

@@ -130,3 +130,25 @@ var getFinalNumberTestCases = []struct {
 		expected:    "nine-hundred and ninety nine", 
 	},
 }
+
+var PostFixJoinerTestCases = []struct {
+	description string
+	input 		int
+	expected 	string
+}{
+	{
+		description: "one million  two-hundred and thirty four thousand  five-hundred and sixty seven",
+		input:		 1234567,
+		expected:    "one million  two-hundred and thirty four thousand  five-hundred and sixty seven   ", 
+	},
+	{
+		description: "one million  two-hundred and thirty four thousand  five-hundred and sixty seven",
+		input:		 9999999,
+		expected:    "nine million  nine-hundred and ninety nine thousand  nine-hundred and ninety nine   ", 
+	},
+	
+}
+
+
+
+
